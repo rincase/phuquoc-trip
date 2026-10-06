@@ -1,6 +1,6 @@
-const CACHE = 'phuquoc-pwa-v3-cloud-linked';
+const CACHE = 'phuquoc-pwa-v4-ui-logo';
 const ASSETS = [
-  './','./index.html','./css/style.css','./js/data.js','./js/app.js','./manifest.webmanifest','./assets/hero.svg',
+  './','./index.html','./css/style.css','./js/data.js','./js/app.js','./manifest.webmanifest','./assets/logo.png',
   './assets/days/day1.jpg','./assets/days/day2.jpg','./assets/days/day3.jpg','./assets/days/day4.jpg','./assets/days/day5.jpg','./assets/days/day6.jpg',
   './icons/icon-192.png','./icons/icon-512.png'
 ];

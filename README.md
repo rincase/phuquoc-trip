@@ -25,3 +25,9 @@
 ## 已綁定雲端 API
 
 此版本已內建 Apps Script Web App URL，開啟 PWA 後會自動從 Google 試算表同步資料，不需要每支手機手動貼 API 網址。
+
+## V4 confirmed changes
+- Replaced header logo, PWA install icon, and manifest icons with the selected third gold Phu Quoc travel badge.
+- Removed the Google Sheets sync settings card from Tools; background cloud sync remains enabled.
+- Removed Today's Quick Actions card; Notes now spans the full row.
+- Checklist UI intentionally remains unchanged.

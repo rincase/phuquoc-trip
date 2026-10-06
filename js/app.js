@@ -114,7 +114,7 @@
         <div class="timeline">${items.map(i=>`<div class="timeline-item"><div class="time">${i.start}${i.end?`–${i.end}`:''}</div><div class="dot-wrap"><div class="dot"></div></div><div><div class="timeline-title">${i.title}</div>${i.detail?`<div class="timeline-detail">${i.detail}</div>`:''}</div></div>`).join('')}</div>
         <div class="hotel-row"><span>今日住宿</span><strong>${hotelForDay(day)||'返家'}</strong></div>
       </section>
-      <div class="grid-2"><section class="mini-card card"><h4>快速操作</h4><div class="button-row"><button class="btn" data-jump="map">地圖導航</button><button class="btn" data-jump="tools">飯店資訊</button></div></section><section class="mini-card card"><h4>備註</h4><div class="subtle">${noteForDate(date)}</div></section></div>`;
+      <section class="mini-card card today-note"><h4>備註</h4><div class="subtle">${noteForDate(date)}</div></section>`;
   }
 
   function renderItinerary(){
@@ -168,7 +168,6 @@
       <section class="tool-card card"><div class="tool-title"><span>✈️</span><h3>航班資訊</h3></div><div class="small-grid"><div class="info-box"><strong>去程 10/18</strong><span class="subtle">20:00 抵達富國島</span></div><div class="info-box"><strong>回程 10/23</strong><span class="subtle">11:00 起飛返台</span></div></div></section>
       <section class="tool-card card"><div class="tool-title"><span>🛏️</span><h3>飯店資訊</h3></div><div class="hotel-list">${DATA.hotels.map(hotelCard).join('')}</div></section>
       ${driverCard(driver)}
-      <section class="tool-card card"><div class="tool-title"><span>☁️</span><h3>Google 試算表同步</h3></div><div class="notice">${cloudStatusText()}</div><div class="field"><label>Apps Script Web App URL</label><input type="url" id="cloudUrlInput" placeholder="https://script.google.com/macros/s/.../exec" value="${cloudApiUrl().replaceAll('"','&quot;')}"></div><div class="field" style="margin-top:10px"><label>你的名稱（寫入清單 updatedBy）</label><input type="text" id="cloudNameInput" placeholder="例如：偉琤" value="${cloudUserName().replaceAll('"','&quot;')}"></div><div class="button-row" style="margin-top:10px"><button class="btn primary" id="saveCloudBtn">儲存並同步</button><button class="btn" id="syncNowBtn">立即同步</button></div><div class="subtle" style="margin-top:8px">未設定網址時，PWA 仍會使用內建離線資料與本機勾選狀態。</div></section>
       <section class="tool-card card"><div class="tool-title"><span>💬</span><h3>常用越南語</h3></div><div class="phrase-list"><div class="phrase"><b>Xin chào</b>你好</div><div class="phrase"><b>Cảm ơn</b>謝謝</div><div class="phrase"><b>Bao nhiêu tiền?</b>多少錢？</div></div></section>
       ${emergencyCard()}`;
   }
@@ -204,17 +203,6 @@
         else { cb.checked=!checked; cb.closest('.check-row').classList.toggle('checked',!checked); showToast('雲端更新失敗'); }
       }else{ setCheck(id,checked); }
     }));
-    document.getElementById('saveCloudBtn')?.addEventListener('click',async()=>{
-      const url=(document.getElementById('cloudUrlInput')?.value||'').trim();
-      const name=(document.getElementById('cloudNameInput')?.value||'').trim();
-      if(url && !/^https:\/\/script\.google\.com\/macros\/s\//.test(url)){ showToast('請貼上 Apps Script Web App /exec 網址'); return; }
-      localStorage.setItem(CLOUD_URL_KEY,url); localStorage.setItem(CLOUD_NAME_KEY,name);
-      const ok=await fetchCloudData(true); renderTools(); bindViewEvents(); if(!url) showToast('已改回離線模式');
-    });
-    document.getElementById('syncNowBtn')?.addEventListener('click',async()=>{
-      if(!cloudApiUrl()){ showToast('請先貼上 Apps Script Web App URL'); return; }
-      await fetchCloudData(true); render();
-    });
     const twd=document.getElementById('twdInput'), vnd=document.getElementById('vndInput'), rate=document.getElementById('rateInput');
     if(twd&&vnd&&rate){ const recalc=()=>{const r=Number(rate.value)||0; vnd.value=Math.round((Number(twd.value)||0)*r); localStorage.setItem('pq:vndRate',String(r));}; twd.addEventListener('input',recalc); rate.addEventListener('input',recalc); vnd.addEventListener('input',()=>{const r=Number(rate.value)||1;twd.value=Math.round((Number(vnd.value)||0)/r);}); }
     document.getElementById('installBtn')?.addEventListener('click',async()=>{if(!deferredInstallPrompt)return;deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;render();});
